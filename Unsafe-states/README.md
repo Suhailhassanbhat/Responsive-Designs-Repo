@@ -2,6 +2,9 @@
 
 It is still in progress. Look out for updates here.
 
+# Story Link
+https://suhailhassanbhat.github.io/portfolio/graphics-five.html
+
 # Analysis
 to find out earthquake vulnerability of Indian States based on four years of data.
 
