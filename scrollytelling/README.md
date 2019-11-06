@@ -12,6 +12,6 @@ Not much analysis involved, since the data I used was clean.
 Find data in CSV files.
 
 # Methodology
-The purpose of this project was to make still graphs responsive. Scrollytelling.js was used to make this graphic responsive. 
+The purpose of this project was to make still graphs responsive using Scrollytelling.js. 
 
 In case of questions, contact shb2145@columbia.edu.
