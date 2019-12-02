@@ -7,6 +7,8 @@ Teachers in Indiana have been protesting in red demanding better pay https://bit
 
 -- Compares salaries of teachers with other professions
 
+# Link to my project: https://suhailhassanbhat.github.io/portfolio/graphics-eight.html
+
 # Who is in the group?
 Just me!
 
