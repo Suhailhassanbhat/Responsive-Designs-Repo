@@ -15,9 +15,9 @@ Just me!
 
 - Salaries of the different profession from the Bureau of Economic Analysis https://apps.bea.gov/itable/iTable.cfm?ReqID=70&step=1
 
-# My current status in terms of data acquisition/analysis/visualization
+# My current status 
 I have collected and cleaned data. Visualized salaries across states
-# Sketch of what the final project might look like, noting any interactivity
+# Sketch of what the final project might look like
 
 -A D3 map of the United States with Scrollytelling that shows states which have higher starting salaries compared to Indiana
 - A drop down placeholder that can be used to look for salary growth of teachers over the past two decades for each state.
