@@ -23,13 +23,12 @@ var svg = d3.select("#my_dataviz")
 // d3.csv(require('../data/total-salaries.csv'))
 //   .then(ready)
 //   .catch(err => console.log('Failed on', err))
-d3.csv("/data/total-salaries.csv", function(data) {
+d3.csv("https://raw.githubusercontent.com/Suhailhassanbhat/Responsive-Designs-Repo/master/teachers-salaries/src/data/total-salaries.csv", function(data) {
+
+
     console.log(data)
-
-
-    
   // List of groups (here I have one group per column)
-  var allGroup = d3.map(data, function(d){return(d.Species)}).keys()
+  var allGroup = d3.map(data, function(d){return(d.Year)}).keys()
 
   // add the options to the button
   d3.select("#selectButton")
@@ -42,7 +41,7 @@ d3.csv("/data/total-salaries.csv", function(data) {
 
   // add the x Axis
   var x = d3.scaleLinear()
-    .domain([0, 12])
+    .domain([-10, 12])
     .range([0, width]);
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")
@@ -51,21 +50,21 @@ d3.csv("/data/total-salaries.csv", function(data) {
   // add the y Axis
   var y = d3.scaleLinear()
             .range([height, 0])
-            .domain([0, 0.4]);
+            .domain([-10, 10]);
   svg.append("g")
       .call(d3.axisLeft(y));
 
   // Compute kernel density estimation for the first group called Setosa
   var kde = kernelDensityEstimator(kernelEpanechnikov(3), x.ticks(140))
   var density =  kde( data
-    .filter(function(d){ return d.Species == "setosa"})
-    .map(function(d){  return +d.Sepal_Length; })
+    .filter(function(d){ return d.Year == "2018"})
+    .map(function(d){  return +d.Alabama; })
   )
 
   // Plot the area
   var curve = svg
     .append('g')
-    .append("path")
+    .append("rect")
       .attr("class", "mypath")
       .datum(density)
       .attr("fill", "#69b3a2")
@@ -73,31 +72,30 @@ d3.csv("/data/total-salaries.csv", function(data) {
       .attr("stroke", "#000")
       .attr("stroke-width", 1)
       .attr("stroke-linejoin", "round")
-      .attr("d",  d3.line()
-        .curve(d3.curveBasis)
-          .x(function(d) { return x(d[0]); })
-          .y(function(d) { return y(d[1]); })
-      );
+      .attr("width", 10)
+      .attr("height", function(d){
+          return +d.Year
+      })
 
   // A function that update the chart when slider is moved?
   function updateChart(selectedGroup) {
     // recompute density estimation
     kde = kernelDensityEstimator(kernelEpanechnikov(3), x.ticks(40))
     var density =  kde( data
-      .filter(function(d){ return d.Species == selectedGroup})
-      .map(function(d){  return +d.Sepal_Length; })
+      .filter(function(d){ return d.Year == selectedGroup})
+      .map(function(d){  return +d.Alabama; })
     )
 
     // update the chart
-    curve
-      .datum(density)
-      .transition()
-      .duration(1000)
-      .attr("d",  d3.line()
-        .curve(d3.curveBasis)
-          .x(function(d) { return x(d[0]); })
-          .y(function(d) { return y(d[1]); })
-      );
+    // curve
+    //   .datum(density)
+    //   .transition()
+    //   .duration(1000)
+    //   .attr("d",  d3.line()
+    //     .curve(d3.curveBasis)
+    //       .x(function(d) { return x(d[0]); })
+    //       .y(function(d) { return y(d[1]); })
+    //   );
   }
 
   // Listen to the slider?
