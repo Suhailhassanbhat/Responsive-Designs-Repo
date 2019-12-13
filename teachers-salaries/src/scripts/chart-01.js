@@ -231,6 +231,7 @@ function ready(json) {
 
     svg.call(tip)
   })
+
   // -------------------------------------------------------
 
   function render() {

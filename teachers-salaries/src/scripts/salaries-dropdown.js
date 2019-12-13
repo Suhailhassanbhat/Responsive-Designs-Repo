@@ -1,123 +1,169 @@
-// import * as d3 from 'd3'
+var stateFields = ['Alabama',
+'Alaska',
+'Arizona',
+'Arkansas',
+'California',
+'Colorado',
+'Connecticut',
+'Delaware',
+'DC',
+'Florida',
+'Georgia',
+'Hawaii',
+'Idaho',
+'Illinois',
+'Indiana',
+'Iowa',
+'Kansas',
+'Kentucky',
+'Louisiana',
+'Maine',
+'Maryland',
+'Massachusetts',
+'Michigan',
+'Minnesota',
+'Mississippi',
+'Missouri',
+'Montan',
+'Nebraska',
+'Nevada',
+'New Hampshire',
+'New Jersey',
+'New Mexico',
+'New York',
+'North Carolina',
+'North Dakota',
+'Ohio',
+'Oklahoma',
+'Oregon',
+'Pennsylvania',
+'Rhode Island',
+'South Carolina',
+'South Dakota',
+'Tennessee',
+'Texas',
+'Utah',
+'Vermont',
+'Virginia',
+'Washington',
+'West Virginia',
+'Wisconsin',
+'Wyoming'];
 
-var margin = {top: 30, right: 30, bottom: 30, left: 50}
-    width = 460 - margin.left - margin.right
-    height = 400 - margin.top - margin.bottom
 
-// append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")")
+d3.csv(require('/data/total-salaries.csv'), function(error, data) {
 
-// load data and make sure data is working
-// update scales and variables
-//finally bar charts
-//update axis
-// change CSS
-// get the data
+    var salaryMap = {};
+    data.forEach(function(d) {
+        var state = d.Year;
+        salaryMap[state] = [];
 
-// d3.csv(require('../data/total-salaries.csv'))
-//   .then(ready)
-//   .catch(err => console.log('Failed on', err))
-d3.csv("https://raw.githubusercontent.com/Suhailhassanbhat/Responsive-Designs-Repo/master/teachers-salaries/src/data/total-salaries.csv", function(data) {
-
-
-    console.log(data)
-  // List of groups (here I have one group per column)
-  var allGroup = d3.map(data, function(d){return(d.Year)}).keys()
-
-  // add the options to the button
-  d3.select("#selectButton")
-    .selectAll('myOptions')
-    .data(allGroup)
-    .enter()
-    .append('option')
-    .text(function (d) { return d; }) // text showed in the menu
-    .attr("value", function (d) { return d; }) // corresponding value returned by the button
-
-  // add the x Axis
-  var x = d3.scaleLinear()
-    .domain([-10, 12])
-    .range([0, width]);
-  svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
-
-  // add the y Axis
-  var y = d3.scaleLinear()
-            .range([height, 0])
-            .domain([-10, 10]);
-  svg.append("g")
-      .call(d3.axisLeft(y));
-
-  // Compute kernel density estimation for the first group called Setosa
-  var kde = kernelDensityEstimator(kernelEpanechnikov(3), x.ticks(140))
-  var density =  kde( data
-    .filter(function(d){ return d.Year == "2018"})
-    .map(function(d){  return +d.Alabama; })
-  )
-
-  // Plot the area
-  var curve = svg
-    .append('g')
-    .append("rect")
-      .attr("class", "mypath")
-      .datum(density)
-      .attr("fill", "#69b3a2")
-      .attr("opacity", ".8")
-      .attr("stroke", "#000")
-      .attr("stroke-width", 1)
-      .attr("stroke-linejoin", "round")
-      .attr("width", 10)
-      .attr("height", function(d){
-          return +d.Year
-      })
-
-  // A function that update the chart when slider is moved?
-  function updateChart(selectedGroup) {
-    // recompute density estimation
-    kde = kernelDensityEstimator(kernelEpanechnikov(3), x.ticks(40))
-    var density =  kde( data
-      .filter(function(d){ return d.Year == selectedGroup})
-      .map(function(d){  return +d.Alabama; })
-    )
-
-    // update the chart
-    // curve
-    //   .datum(density)
-    //   .transition()
-    //   .duration(1000)
-    //   .attr("d",  d3.line()
-    //     .curve(d3.curveBasis)
-    //       .x(function(d) { return x(d[0]); })
-    //       .y(function(d) { return y(d[1]); })
-    //   );
-  }
-
-  // Listen to the slider?
-  d3.select("#selectButton").on("change", function(d){
-    selectedGroup = this.value
-    updateChart(selectedGroup)
-  })
-
+        stateFields.forEach(function(field) {
+            salaryMap[state].push( +d[field] );
+        });
+    });
+    makeVis(salaryMap);
 });
 
+var makeVis = function(salaryMap) {
+    // Define dimensions of vis
+    var margin = { top: 30, right: 30, bottom: 30, left: 30 },
+        width  = 800 - margin.left - margin.right,
+        height = 600 - margin.top  - margin.bottom;
 
-// Function to compute density
-function kernelDensityEstimator(kernel, X) {
-  return function(V) {
-    return X.map(function(x) {
-      return [x, d3.mean(V, function(v) { return kernel(x - v); })];
-    });
-  };
-}
-function kernelEpanechnikov(k) {
-  return function(v) {
-    return Math.abs(v /= k) <= 1 ? 0.75 * (1 - v * v) / k : 0;
-  };
-}
+    // Make x scale
+    var xScale = d3.scale.ordinal()
+        .domain(stateFields)
+        .rangeRoundBands([0, width], 0.1);
 
+    // Make y scale, the domain will be defined on bar update
+    var yScale = d3.scale.linear()
+        .domain([-25, 25])
+        .range([height, 0]);
+
+    // Create canvas
+    var canvas = d3.select("#vis-container")
+      .append("svg")
+        .attr("width",  width  + margin.left + margin.right)
+        .attr("height", height + margin.top  + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Make x-axis and add to canvas
+    var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient("bottom");
+
+    canvas.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height/2 + ")")
+        .call(xAxis);
+
+    // Make y-axis and add to canvas
+    var yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left");
+
+    var yAxisHandleForUpdate = canvas.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+    yAxisHandleForUpdate.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .style("font-size", 10)
+        .text("Percent change");
+
+    var updateBars = function(data) {
+
+        yAxisHandleForUpdate.call(yAxis);
+
+        var bars = canvas.selectAll(".bar").data(data);
+
+        // Add bars for new data
+        bars.enter()
+          .append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d,i) { return xScale( stateFields[i] ); })
+            .attr("width", xScale.rangeBand())
+            .attr("y", function(d,i) { return yScale(d); })
+            .attr("height", function(d,i) { return height - yScale(d); });
+       
+
+        // Update old ones, already have x / width from before
+        bars
+            .transition().duration(250)
+            .attr("y", function(d,i) { return yScale(d); })
+            .attr("height", function(d,i) { return height/2 - yScale(d); });
+
+        // Remove old ones
+        bars.exit().remove();
+    };
+
+    // Handler for dropdown value change
+    var dropdownChange = function() {
+        var newState = d3.select(this).property('value'),
+            newData   = salaryMap[newState];
+
+        updateBars(newData);
+    };
+
+    var salaries = Object.keys(salaryMap).sort();
+
+    var dropdown = d3.select("#vis-container")
+        .insert("select", "svg")
+        .on("change", dropdownChange);
+
+    dropdown.selectAll("option")
+        .data(salaries)
+      .enter().append("option")
+        .attr("value", function (d) { return d; })
+        .text(function (d) {    
+            return d
+        });
+
+    var initialData = salaryMap[ salaries[0] ];
+    updateBars(initialData);
+};
