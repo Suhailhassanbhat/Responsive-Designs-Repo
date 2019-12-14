@@ -36333,7 +36333,7 @@ var margin = {
   top: 0,
   left: 0,
   right: 0,
-  bottom: 10
+  bottom: 20
 };
 var height = 500 - margin.top - margin.bottom;
 var width = 750 - margin.left - margin.right;
@@ -36347,8 +36347,9 @@ d3.json(require('/data/salaries.json')).then(ready).catch(function (err) {
 function ready(json) {
   var states = topojson.feature(json, json.objects.salaries);
   console.log(json);
+  svg.append('text').attr('class', 'source').text("Source : National Education Association").attr("x", 3).attr('y', height + margin.bottom - 2).style("font-size", 9);
   var formatComma = d3.format(',');
-  var tip = d3.tip().attr('class', 'd3-tip').style('position', 'fixed').offset([10, 30]).html(function (d) {
+  var tip = d3.tip().attr('class', 'd3-tip').style('position', 'fixed').offset([10, 10]).html(function (d) {
     return "<b>".concat(d.properties.NAME, "</b> <br>  <b>Starting Salary:</b> <span style='color:red'>$").concat(formatComma(d.properties.teacher_sa), "</span>");
   });
   svg.call(tip);
