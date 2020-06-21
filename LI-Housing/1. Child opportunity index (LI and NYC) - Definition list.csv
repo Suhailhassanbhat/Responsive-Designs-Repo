@@ -1,0 +1,38 @@
+﻿Column,Definition
+geoid,"2010 census tract FIPS codes	"
+year,Year of observation (2010 or 2015)
+in100,In one of the 100 largest metro areas
+msaid15,Metro/Micro Area (2015) FIPS Code
+msaname,Metro/Micro Area (2015) Name
+countyfip,County FIPS Code
+statefips,State FIPS Code
+stateusps,State USPS Code
+pop,"Number of children aged 0-17, ACS (2008-12 for 2010, 2013-17 for 2015)"
+z_ED_nat,"Z-scores, education domain, nationally-normed"
+z_HE_nat,"Z-scores, health and environment domain, nationally-normed"
+z_SE_nat,"Z-scores, social and economic domain, nationally-normed"
+z_COI_nat,"Z-scores, overall COI, nationally-normed"
+c5_ED_nat,"Child Opportunity Levels, education domain, nationally-normed"
+c5_HE_nat,"Child Opportunity Levels, health and environment domain, nationally-normed"
+c5_SE_nat,"Child Opportunity Levels, social and economic domain, nationally-normed	"
+c5_COI_n,"Child Opportunity Levels, overall COI, nationally-normed"
+r_ED_nat,"Child Opportunity Scores, education domain, nationally-normed"
+r_HE_nat,"Child Opportunity Scores, health and environment domain, nationally-normed"
+r_SE_nat,"Child Opportunity Scores, social and economic domain, nationally-normed"
+r_COI_nat,"Child Opportunity Scores, overall COI, nationally-normed"
+c5_ED_stt,"Child Opportunity Levels, education domain, state-normed"
+c5_HE_stt,"Child Opportunity Levels, health and environment domain, state-normed"
+c5_SE_stt,"Child Opportunity Levels, social and economic domain, state-normed"
+c5_COI_st,"Child Opportunity Levels, overall COI, state-normed"
+r_ED_stt,"Child Opportunity Scores, education domain, state-normed	"
+r_HE_stt,"Child Opportunity Scores, health and environment domain, state-normed"
+r_SE_stt,"Child Opportunity Scores, social and economic domain, state-normed"
+r_COI_stt,"Child Opportunity Scores, overall COI, state-normed"
+c5_ED_me,"Child Opportunity Levels, education domain, metro-normed"
+c5_HE_me,"Child Opportunity Levels, health and environment domain, metro-normed	"
+c5_SE_me,"Child Opportunity Levels, social and economic domain, metro-normed"
+c5_COI_m,"Child Opportunity Levels, overall COI, metro-normed"
+r_ED_met,"Child Opportunity Scores, education domain, metro-normed"
+r_HE_met,"Child Opportunity Scores, health and environment domain, metro-normed"
+r_SE_met,"Child Opportunity Scores, social and economic domain, metro-normed"
+r_COI_me,"Child Opportunity Scores, overall COI, metro-normed"
